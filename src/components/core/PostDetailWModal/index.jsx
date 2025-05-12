@@ -174,7 +174,7 @@ const PostDetailWModal = ({
 							</div>
 						</div>
 
-						{comments.length > 0 &&
+						{commentsCount > 0 &&
 							comments.map((comment) => (
 								<Comment
 									comment={comment.comment}

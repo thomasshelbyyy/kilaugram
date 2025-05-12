@@ -37,6 +37,7 @@ const PostDetail = ({
 }) => {
 	const time = timeAgo(createdAt);
 	const { loggedInUser } = useUser();
+	// console.log({commentsCount})
 
 	const router = useRouter();
 
@@ -171,7 +172,7 @@ const PostDetail = ({
 							</div>
 						</div>
 
-						{comments.length > 0 &&
+						{commentsCount > 0 &&
 							comments.map((comment) => (
 								<Comment
 									comment={comment.comment}

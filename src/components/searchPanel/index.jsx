@@ -89,6 +89,7 @@ const SearchPanel = ({ isVisible, onClose }) => {
         users.length > 0 &&
         users.map((user) => (
           <FoundUser
+            key={user.id}
             username={user.username}
             bio={user.bio}
             profilePictureUrl={user.profilePictureUrl}

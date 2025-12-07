@@ -23,6 +23,7 @@ const SearchHistory = ({ isVisible, users, loading, userNotFound }) => {
           !loading &&
           users.map((user) => (
             <FoundUser
+              key={user.id}
               bio={user.bio}
               profilePictureUrl={user.profilePictureUrl}
               username={user.username}

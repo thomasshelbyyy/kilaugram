@@ -1,12 +1,16 @@
 "use client";
 
 import { HeartIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchHistory from "../searchHistory";
 import Link from "next/link";
 
 const Navbar = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [debouncedValue, setDebouncedValue] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [users, setUsers] = useState([]);
 
   const handleFocus = () => {
     setIsSearchFocused(true);
@@ -18,6 +22,41 @@ const Navbar = () => {
       setIsSearchFocused(false);
     }, 100); // Adjust the delay if needed
   };
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(inputValue);
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [inputValue]);
+
+  useEffect(() => {
+    if (!debouncedValue) {
+      setUsers([]);
+      return;
+    }
+
+    const fetchUsers = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/user/search`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ keyword: debouncedValue }),
+        });
+        const data = await res.json();
+        console.log({ data });
+        setUsers(data.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, [debouncedValue]);
 
   return (
     <>
@@ -35,6 +74,8 @@ const Navbar = () => {
               className="focus:outline-none bg-transparent"
               onFocus={handleFocus}
               onBlur={handleBlur}
+              onChange={(e) => setInputValue(e.target.value)}
+              value={inputValue}
             />
           </div>
           <Link href="/message">
@@ -42,7 +83,12 @@ const Navbar = () => {
           </Link>
 
           {/* Render SearchHistory below the input when focused */}
-          <SearchHistory isVisible={isSearchFocused} />
+          <SearchHistory
+            isVisible={isSearchFocused}
+            users={users}
+            loading={loading}
+            userNotFound={debouncedValue && users.length < 1}
+          />
         </div>
       </nav>
     </>

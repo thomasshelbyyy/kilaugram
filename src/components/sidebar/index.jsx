@@ -2,7 +2,7 @@
 
 import { FaInstagram } from "react-icons/fa";
 import { Satisfy } from "@next/font/google";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Bars3Icon,
   HomeIcon as HomeSolid,
@@ -40,6 +40,13 @@ const Sidebar = ({ session, loggedInUser }) => {
   const [createPostActive, setCreatePostActive] = useState(false);
   const [moreMenuActive, setMoreMenuActive] = useState(false);
   const pathname = usePathname();
+  useEffect(() => {
+    // Tutup panel setiap kali pindah URL
+    setSearchPanelVisible(false);
+    setSmallNavigation(false);
+    setNotificationPanelVisible(false); //opsional
+    setMoreMenuActive(false); //opsional
+  }, [pathname]);
 
   const handleSearchClicked = () => {
     setSmallNavigation((prev) => !prev);
@@ -73,7 +80,7 @@ const Sidebar = ({ session, loggedInUser }) => {
     <>
       <aside
         className={`fixed border-r border-gray-200 bg-black hidden md:flex flex-col gap-6 text-white p-6 items-center ${
-          pathname === "/message" || smallNavigation
+          pathname.startsWith("/message") || smallNavigation
             ? "lg:items-center"
             : "lg:w-64 lg:items-start"
         } h-screen transition duration-1000 z-[99]`}
@@ -82,7 +89,7 @@ const Sidebar = ({ session, loggedInUser }) => {
           className="w-full text-center flex justify-center lg:justify-start"
           href="/"
         >
-          {pathname === "/message" || smallNavigation ? (
+          {pathname.startsWith("/message") || smallNavigation ? (
             <FaInstagram className="w-7 h-7 text-white" />
           ) : (
             <div className="flex items-center">
@@ -113,7 +120,7 @@ const Sidebar = ({ session, loggedInUser }) => {
                   <HomeOutline className="w-7 h-7" />
                 )}
               </span>
-              {pathname !== "/message" && (
+              {!pathname.startsWith("/message") && (
                 <span className={`hidden ${!smallNavigation && "lg:block"}`}>
                   Home
                 </span>
@@ -128,7 +135,7 @@ const Sidebar = ({ session, loggedInUser }) => {
               <span>
                 <MagnifyingGlassIcon className="w-7 h-7" />
               </span>
-              {pathname !== "/message" && (
+              {!pathname.startsWith("/message") && (
                 <span className={`hidden ${!smallNavigation && "lg:block"}`}>
                   Search
                 </span>
@@ -147,7 +154,7 @@ const Sidebar = ({ session, loggedInUser }) => {
                   <GlobeOutline className="w-7 h-7" />
                 )}
               </span>
-              {pathname !== "/message" && (
+              {!pathname.startsWith("/message") && (
                 <span className={`hidden ${!smallNavigation && "lg:block"}`}>
                   Explore
                 </span>
@@ -162,7 +169,7 @@ const Sidebar = ({ session, loggedInUser }) => {
               <span>
                 <PlayCircleIcon className="w-7 h-7" />
               </span>
-              {pathname !== "/message" && (
+              {!pathname.startsWith("/message") && (
                 <span className={`hidden ${!smallNavigation && "lg:block"}`}>
                   Reels
                 </span>
@@ -175,13 +182,13 @@ const Sidebar = ({ session, loggedInUser }) => {
               href="/message"
             >
               <span>
-                {pathname === "/message" ? (
+                {pathname.startsWith("/message") ? (
                   <ChatSolid className="w-7 h-7" />
                 ) : (
                   <ChatOutline className="w-7 h-7" />
                 )}
               </span>
-              {pathname !== "/message" && (
+              {!pathname.startsWith("/message") && (
                 <span className={`hidden ${!smallNavigation && "lg:block"}`}>
                   Messages
                 </span>
@@ -196,7 +203,7 @@ const Sidebar = ({ session, loggedInUser }) => {
               <span>
                 <HeartIcon className="w-7 h-7" />
               </span>
-              {pathname !== "/message" && (
+              {!pathname.startsWith("/message") && (
                 <span className={`hidden ${!smallNavigation && "lg:block"}`}>
                   Notifications
                 </span>
@@ -211,7 +218,7 @@ const Sidebar = ({ session, loggedInUser }) => {
               <span>
                 <PlusCircleIcon className="w-7 h-7" />
               </span>
-              {pathname !== "/message" && (
+              {!pathname.startsWith("/message") && (
                 <span className={`hidden ${!smallNavigation && "lg:block"}`}>
                   Create
                 </span>
@@ -232,7 +239,7 @@ const Sidebar = ({ session, loggedInUser }) => {
                   alt=""
                 />
               </span>
-              {pathname !== "/message" && (
+              {!pathname.startsWith("/message") && (
                 <span className={`hidden ${!smallNavigation && "lg:block"}`}>
                   Profile
                 </span>
@@ -247,7 +254,7 @@ const Sidebar = ({ session, loggedInUser }) => {
               <span>
                 <Bars3Icon className="w-7 h-7" />
               </span>
-              {pathname !== "/message" && (
+              {!pathname.startsWith("/message") && (
                 <span className={`hidden ${!smallNavigation && "lg:block"}`}>
                   More
                 </span>
